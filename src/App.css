@@ -1,0 +1,14 @@
+.grid-container{
+  padding-top: 4rem;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  min-height:100vh;
+  flex-wrap:wrap;
+}
+
+.grid-container>div{
+  min-width: 300px;
+  flex-basis: 45%;
+  margin: 2.5%;
+}
