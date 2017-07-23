@@ -2,6 +2,7 @@
   "name": "surveymonkey-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://apps.techlaunch.io/surveys",
   "dependencies": {
     "material-ui": "^0.18.6",
     "prop-types": "^15.5.10",
