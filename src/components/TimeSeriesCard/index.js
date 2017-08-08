@@ -7,6 +7,30 @@ export default class TimeSeriesCard extends Component{
   constructor(props){
     super(props);
   }
+  shouldComponentUpdate(nextProps){
+    return nextProps.surveyResults !== null && this.props.surveyResults === null;
+  }
+  mountGraph(){
+    let vis = window.vis;
+    var container = document.getElementById("canvas-"+this.props.surveyQuestionID);
+    if (container) container.innerHTML = "";
+    var items = this.buildDataSet();
+    if (items){
+      var dataset = new vis.DataSet(items);
+      var options = {
+        graphHeight: 200,
+        dataAxis: {
+          left: {
+            range: {
+              min: this.props.rangeMin,
+              max: this.props.rangeMax
+            }
+          }
+        }
+      };
+      var graph2d = new vis.Graph2d(container, dataset, options);
+    }
+  }
   buildDataSet(){
     if (!this.props.surveyResults || !this.props.surveyQuestionID || !this.props.answerIDValueMap){
       return null;
@@ -36,26 +60,7 @@ export default class TimeSeriesCard extends Component{
   }
 
   render(){
-    let vis = window.vis;
-    var container = document.getElementById("canvas-"+this.props.surveyQuestionID);
-    if (container) container.innerHTML = "";
-    var items = this.buildDataSet();
-    if (items){
-      var dataset = new vis.DataSet(items);
-      var options = {
-
-        graphHeight: 200,
-        dataAxis: {
-          left: {
-            range: {
-              min: this.props.rangeMin,
-              max: this.props.rangeMax
-            }
-          }
-        }
-      };
-      var graph2d = new vis.Graph2d(container, dataset, options);
-    }
+    this.mountGraph();
     return (
       <Card>
         <CardHeader

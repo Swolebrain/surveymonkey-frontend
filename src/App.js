@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import NavBar from './components/NavBar';
+import CircularProgress from 'material-ui//CircularProgress';
 import TextSummaryPanel from './components/TextSummaryPanel';
 import TimeSeriesCard from './components/TimeSeriesCard';
 import {API_URI} from './config';
@@ -15,11 +16,13 @@ class App extends Component {
       dateInterval: 0,
       instructor: 0,
       drawerVisible: false,
-      instructorList: {}
+      instructorList: {},
+      loading: true
     }
     fetch(API_URI+"/surveyresults")
     .then(serverRes=>{
       if (serverRes.status != 200) throw {err: "Error getting surveyresults", serverRes};
+      this.setState( { loading: false} );
       return serverRes.json()
     })
     .then(surveyResults=>{
@@ -75,6 +78,18 @@ class App extends Component {
     if (this.state.dateInterval) ret += "Dates: "+dateIntervals[this.state.dateInterval];
     return ret;
   }
+  renderLoadingOverlay(){
+    if (!this.state.loading) return null;
+    return (
+      <div className="loading-overlay">
+        <CircularProgress size={80} thickness={5} />
+      </div>
+    )
+  }
+  hideDrawer = ()=>{
+     if (this.state.drawerVisible)
+      this.setState({drawerVisible: false});
+  }
   render() {
     let resultsToDisplay = this.applyFilters();
     return (
@@ -84,7 +99,8 @@ class App extends Component {
             instructorList={this.state.instructorList} drawerVisible={this.state.drawerVisible}
             toggleDrawer={this.toggleDrawer} loadInstructors={this.loadInstructors}
             handleTimeChange={this.handleTimeChange} handleInstructorChange={this.handleInstructorChange}/>
-          <div className="grid-container">
+          <div className="grid-container" onClick={this.hideDrawer}>
+            {this.renderLoadingOverlay()}
             <TextSummaryPanel
               subtitle={this.getSubtitle()}
               surveyResults={resultsToDisplay} />
