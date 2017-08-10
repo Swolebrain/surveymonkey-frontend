@@ -58,6 +58,7 @@ export default class NavBar extends React.Component {
               <MenuItem value={1} primaryText="YTD" />
               <MenuItem value={2} primaryText="QTD" />
               <MenuItem value={3} primaryText="MTD" />
+              <MenuItem value={4} primaryText="Last Month" />
             </DropDownMenu>
           </div>
           <div style={styles.optionsContainer} >

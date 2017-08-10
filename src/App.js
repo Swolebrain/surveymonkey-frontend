@@ -27,7 +27,7 @@ class App extends Component {
     })
     .then(surveyResults=>{
       console.log("Received survey results from server");
-      // console.log(surveyResults);
+      console.log(surveyResults);
       this.setState({surveyResults});
     })
   }
@@ -43,12 +43,22 @@ class App extends Component {
     if (this.state.dateInterval === 1) return new Date("01-01-"+new Date().getFullYear());
     if (this.state.dateInterval === 2) return computerQuarterByMonth(new Date().getMonth());
     if (this.state.dateInterval === 3) return new Date((new Date().getMonth()+1)+"-01-"+new Date().getFullYear());
+    if (this.state.dateInterval === 4) return new Date(getLastMonthDate());
     return new Date(0);
     function computerQuarterByMonth(m){
       var qtrNumber = Math.floor(m/3);
       var qtrMonthStart = qtrNumber*3+1;
       var date = new Date(qtrMonthStart+"-01-"+new Date().getFullYear());
       return date;
+    }
+    function getLastMonthDate(){
+      let lastMonth = new Date().getMonth();
+      let year = new Date().getFullYear();
+      if (lastMonth === 0){
+        lastMonth = 12;
+        year--;
+      }
+      return lastMonth + "-01-" + year;
     }
   }
   applyFilters(){
@@ -73,7 +83,7 @@ class App extends Component {
     if (!this.state.instructor && !this.state.dateInterval)
       return "Use menu to change time intervals or instructor.";
     let ret = "";
-    let dateIntervals = ["All", "YTD", "QTD", "MTD"];
+    let dateIntervals = ["All", "YTD", "QTD", "MTD", "Last Month"];
     if (this.state.instructor) ret += "Instructor: "+this.state.instructorList[this.state.instructor]+".";
     if (this.state.dateInterval) ret += "Dates: "+dateIntervals[this.state.dateInterval];
     return ret;

@@ -8,7 +8,9 @@ export default class TimeSeriesCard extends Component{
     super(props);
   }
   shouldComponentUpdate(nextProps){
-    return nextProps.surveyResults !== null && this.props.surveyResults === null;
+    let np = nextProps.surveyResults;
+    let cur = this.props.surveyResults;
+    return np && !cur || (np && cur && np.length != cur.length);
   }
   mountGraph(){
     let vis = window.vis;
@@ -26,7 +28,8 @@ export default class TimeSeriesCard extends Component{
               max: this.props.rangeMax
             }
           }
-        }
+        },
+        autoResize: false
       };
       var graph2d = new vis.Graph2d(container, dataset, options);
     }
